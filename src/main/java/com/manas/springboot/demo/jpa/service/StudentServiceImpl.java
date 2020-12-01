@@ -1,9 +1,13 @@
 package com.manas.springboot.demo.jpa.service;
 
+import com.manas.springboot.demo.dto.AddressDto;
+import com.manas.springboot.demo.dto.StudentDto;
+import com.manas.springboot.demo.jpa.entity.Address;
 import com.manas.springboot.demo.jpa.entity.Student;
 import com.manas.springboot.demo.jpa.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -20,7 +24,7 @@ public class StudentServiceImpl implements StudentService {
     private EntityManager entityManager;
 
     @Override
-    //@Transactional
+   // @Transactional
     public Student saveStudent(Student student) {
         Student response = studentRepository.save(student);
         return response;
@@ -28,10 +32,21 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    //@Transactional(readOnly = true)
-    public Student getStudent(int id) {
+    //@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public StudentDto getStudent(int id) {
         // Optional<Student> studentResponse = studentRepository.findById(id);
         Student student = entityManager.find(Student.class, id);
-        return student;
+
+        StudentDto studentDto = new StudentDto();
+        AddressDto addressDto = new AddressDto();
+        addressDto.setCountry(student.getAddress().getCountry());
+        addressDto.setPin(student.getAddress().getPin());
+        addressDto.setId(student.getAddress().getId());
+        studentDto.setAddress(addressDto);
+        studentDto.setId(student.getId());
+        studentDto.setName(student.getName());
+        studentDto.setRollNumber(student.getRollNumber());
+        studentDto.setUniversity(student.getUniversity());
+        return studentDto;
     }
 }

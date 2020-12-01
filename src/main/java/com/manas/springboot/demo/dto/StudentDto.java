@@ -1,32 +1,23 @@
-package com.manas.springboot.demo.jpa.entity;
+package com.manas.springboot.demo.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.manas.springboot.demo.jpa.entity.Address;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Student implements Serializable {
-
+public class StudentDto implements Serializable {
 
     private int id;
 
-
     private String name;
-
 
     private String rollNumber;
 
-
     private String university;
 
+    public AddressDto address;
 
-    private Address address;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -35,7 +26,6 @@ public class Student implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -44,7 +34,6 @@ public class Student implements Serializable {
         this.name = name;
     }
 
-    @Column(name = "roll_number")
     public String getRollNumber() {
         return rollNumber;
     }
@@ -53,7 +42,6 @@ public class Student implements Serializable {
         this.rollNumber = rollNumber;
     }
 
-    @Column(name = "university")
     public String getUniversity() {
         return university;
     }
@@ -62,12 +50,10 @@ public class Student implements Serializable {
         this.university = university;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    public Address getAddress() { return this.address; }
 
-    public void setAddress(Address address) {
+    public AddressDto getAddress() { return this.address; }
+
+    public void setAddress(AddressDto address) {
         this.address = address;
     }
 }
